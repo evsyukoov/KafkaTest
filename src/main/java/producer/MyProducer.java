@@ -24,7 +24,7 @@ public class MyProducer {
 
     Producer<Integer, String> producer;
 
-    Properties properties;
+    final Properties properties;
 
     public MyProducer() {
         this.properties = new Properties();
@@ -34,7 +34,6 @@ public class MyProducer {
                 IntegerSerializer.class.getName());
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class.getName());
-        properties.put("timeout.ms", "50");
         properties.put("transactional.id", "1");
         this.producer = new KafkaProducer<>(properties, new IntegerSerializer(), new StringSerializer());
 

@@ -15,7 +15,3 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     depends_on:
       - zookeeper
-
-#  java_app:
-#    image: java_app_image
-#    depends_on:

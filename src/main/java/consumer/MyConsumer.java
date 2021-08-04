@@ -15,19 +15,29 @@ import java.util.logging.Logger;
 public class MyConsumer {
 
     final Logger logger = Logger.getLogger(MyConsumer.class.getName());
+
+    final Properties properties;
+
+    KafkaConsumer<Integer, String> consumer;
+
+    public MyConsumer() {
+        properties = new Properties();
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                KafkaConstants.SERVER_ADDRESS);
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                IntegerDeserializer.class.getName());
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class.getName());
+        properties.put("group.id", "test");
+        properties.put("enable.auto.commit", "false");
+        properties.put("auto.offset.reset", "earliest");
+
+        consumer = new KafkaConsumer
+                <>(properties);
+    }
+
     public void run() {
 
-        final Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                KafkaConstants.SERVER_ADDRESS);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                IntegerDeserializer.class.getName());
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class.getName());
-        props.put("group.id", "test");
-
-        KafkaConsumer<Integer, String> consumer = new KafkaConsumer
-                <>(props);
         consumer.subscribe(Arrays.asList(KafkaConstants.KAFKA_TOPIC));
         AtomicInteger res = new AtomicInteger();
         while (true) {
@@ -46,5 +56,4 @@ public class MyConsumer {
         logger.log(Level.INFO, String.format("%d numbers was FizzBuzzed!\n", res.get()));
         consumer.close();
     }
-
 }
