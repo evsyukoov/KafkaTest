@@ -32,7 +32,7 @@ public class MyConsumer {
         AtomicInteger res = new AtomicInteger();
         while (true) {
             final ConsumerRecords<Integer, String> consumerRecords =
-                    consumer.poll(300);
+                    consumer.poll(3000);
 
             if (consumerRecords.count() == 0) {
                 break;
@@ -40,7 +40,7 @@ public class MyConsumer {
             consumerRecords.forEach(record -> {
                 FizzBuzzHelper.print(record.value());
                 res.getAndIncrement();
-            });;
+            });
             consumer.commitAsync();
         }
         logger.log(Level.INFO, String.format("%d numbers was FizzBuzzed!\n", res.get()));
